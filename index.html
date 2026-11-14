@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Senu — A Sincere Note</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tone.js for gentle synthesized music-box background melody -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Base & Pink/Berry Palette */
+        :root {
+            --bg-deep: #140812;
+            --accent-pink: #f472b6;
+            --accent-hotpink: #ec4899;
+            --accent-blush: #fbcfe8;
+            --accent-rosegold: #fda4af;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at 50% 0%, #2b0f24 0%, #140812 75%);
+            color: #fdf2f8;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-serif-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Ambient Pink & Magenta Glowing Orbs */
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.55;
+            animation: floatOrb 14s ease-in-out infinite alternate;
+        }
+
+        .orb-1 {
+            width: 340px;
+            height: 340px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.75) 0%, rgba(131, 24, 67, 0) 70%);
+            top: -90px;
+            left: -80px;
+        }
+
+        .orb-2 {
+            width: 360px;
+            height: 360px;
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.65) 0%, rgba(157, 23, 77, 0) 70%);
+            bottom: -110px;
+            right: -70px;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(251, 113, 133, 0.45) 0%, rgba(136, 19, 55, 0) 70%);
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -9s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(25px, -22px) scale(1.08); }
+            100% { transform: translate(-20px, 28px) scale(0.95); }
+        }
+
+        /* Rose-Pink Glassmorphism Card */
+        .glass-panel {
+            background: rgba(34, 14, 29, 0.68);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1px solid rgba(244, 114, 182, 0.22);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), inset 0 1px 0 0 rgba(251, 207, 232, 0.16);
+        }
+
+        /* Kinetic Typography & Stage Transitions */
+        .stage-container {
+            display: none;
+            opacity: 0;
+            transform: translateY(18px) scale(0.98);
+            transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .stage-container.active {
+            display: block;
+        }
+
+        .stage-container.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Staggered Child Animations */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .visible .stagger-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .visible .stagger-1 { transition-delay: 0.1s; }
+        .visible .stagger-2 { transition-delay: 0.25s; }
+        .visible .stagger-3 { transition-delay: 0.4s; }
+        .visible .stagger-4 { transition-delay: 0.55s; }
+        .visible .stagger-5 { transition-delay: 0.7s; }
+
+        /* =========================================================
+           KINETIC TYPOGRAPHY & MESSAGE TEXT ANIMATIONS
+           ========================================================= */
+        .kinetic-greeting {
+            opacity: 0;
+            filter: blur(8px);
+            transform: translateY(14px) scale(0.97);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .kinetic-greeting.text-revealed {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0) scale(1);
+        }
+
+        /* Individual Animated Words inside the Letter */
+        .kinetic-word {
+            display: inline-block;
+            opacity: 0;
+            filter: blur(6px);
+            transform: translateY(10px);
+            transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, filter, transform;
+        }
+
+        .kinetic-word.word-visible {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+
+        /* Highlighted Emotional Phrases with Soft Pink Shimmer */
+        .pink-shimmer-text {
+            background: linear-gradient(
+                110deg,
+                #fbcfe8 15%,
+                #f472b6 38%,
+                #ffffff 50%,
+                #f472b6 62%,
+                #fbcfe8 85%
+            );
+            background-size: 220% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pinkTextShimmer 4.2s linear infinite;
+            font-weight: 600;
+        }
+
+        @keyframes pinkTextShimmer {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        /* Subtle Glowing Pulse on the Final Closing Line */
+        .closing-glow {
+            text-shadow: 0 0 18px rgba(244, 114, 182, 0.45);
+        }
+
+        /* Pink Wax Seal / Heart Pulse Glow */
+        @keyframes pulseGlowPink {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.55), 0 12px 28px -5px rgba(236, 72, 153, 0.65); }
+            50% { box-shadow: 0 0 0 16px rgba(244, 114, 182, 0), 0 16px 34px -5px rgba(244, 114, 182, 0.7); }
+        }
+
+        .seal-btn {
+            animation: pulseGlowPink 2.6s infinite;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .seal-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* Patch Note Check Cards */
+        .patch-card {
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(244, 114, 182, 0.16);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .patch-card.checked {
+            border-color: rgba(244, 114, 182, 0.55);
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.18), rgba(251, 113, 133, 0.1));
+        }
+
+        .patch-check-circle {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .patch-card.checked .patch-check-circle {
+            background: linear-gradient(135deg, #f472b6, #ec4899);
+            border-color: transparent;
+            transform: scale(1.08);
+        }
+
+        /* Digital Ticket Perforation */
+        .ticket-cutout {
+            position: relative;
+        }
+        .ticket-cutout::before,
+        .ticket-cutout::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 22px;
+            height: 22px;
+            background-color: #1c0b18;
+            border-radius: 50%;
+            transform: translateY(-50%);
+            border: 1px solid rgba(244, 114, 182, 0.25);
+        }
+        .ticket-cutout::before { left: -12px; }
+        .ticket-cutout::after { right: -12px; }
+
+        /* Tap-Anywhere Floating Pink Hearts */
+        .tap-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 45;
+            font-size: 16px;
+            user-select: none;
+            animation: floatUpHeart 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes floatUpHeart {
+            0% {
+                opacity: 0.95;
+                transform: translate(-50%, -50%) scale(0.6) rotate(-8deg);
+            }
+            60% {
+                opacity: 0.85;
+                transform: translate(calc(-50% + var(--drift-x, 12px)), -65px) scale(1.15) rotate(8deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(-50% + var(--drift-x, 12px)), -110px) scale(0.85) rotate(14deg);
+            }
+        }
+
+        /* Hold-to-Seal Pinky Promise Progress Fill */
+        .hold-progress-fill {
+            transition: width 0.08s linear;
+        }
+
+        /* Canvas Background & Confetti */
+        #bgCanvas, #confettiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        #bgCanvas { z-index: 1; }
+        #confettiCanvas { z-index: 50; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4 sm:p-6 relative">
+
+    <!-- Ambient Pink Orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+
+    <!-- Floating Cherry-Blossom / Pink Particles Canvas -->
+    <canvas id="bgCanvas"></canvas>
+    <!-- Finale Pink Confetti & Petals Canvas -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- Gentle Music-Box Ambient Sound Toggle (Top Right) -->
+    <button id="musicToggleBtn" onclick="toggleAmbientMusic()" title="Toggle Soft Music" class="fixed top-4 right-4 z-40 px-3 py-2 rounded-full bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/30 text-pink-200 hover:text-white text-xs font-medium transition-all backdrop-blur-md flex items-center gap-1.5 cursor-pointer shadow-lg">
+        <span id="musicIcon">🎵</span>
+        <span id="musicLabel">Soft Music: Off</span>
+    </button>
+
+    <!-- Main Mobile-First Container -->
+    <main class="relative z-10 w-full max-w-md mx-auto">
+        
+        <!-- Progress Indicator Pills (Hidden on Stage 1) -->
+        <div id="progressBar" class="hidden flex items-center justify-center gap-2 mb-5 opacity-0 transition-opacity duration-500">
+            <span class="h-1.5 w-8 rounded-full bg-pink-400 transition-all duration-300" id="dot-1"></span>
+            <span class="h-1.5 w-2.5 rounded-full bg-pink-200/20 transition-all duration-300" id="dot-2"></span>
+            <span class="h-1.5 w-2.5 rounded-full bg-pink-200/20 transition-all duration-300" id="dot-3"></span>
+            <span class="h-1.5 w-2.5 rounded-full bg-pink-200/20 transition-all duration-300" id="dot-4"></span>
+            <span class="h-1.5 w-2.5 rounded-full bg-pink-200/20 transition-all duration-300" id="dot-5"></span>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- STAGE 1: THE DIGITAL ENVELOPE / UNLOCK SCREEN             -->
+        <!-- ========================================================= -->
+        <section id="stage-1" class="stage-container active visible glass-panel rounded-3xl p-8 sm:p-10 text-center">
+            <div class="stagger-item stagger-1 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-500/15 border border-pink-400/25 text-pink-200 text-xs font-medium tracking-wide uppercase mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-pink-400 animate-ping"></span>
+                <span>Private Note &bull; For Senu Only</span>
+            </div>
+
+            <h1 class="stagger-item stagger-2 font-serif-display text-3xl sm:text-4xl font-semibold text-white leading-tight mb-3">
+                For <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-pink-200 via-pink-400 to-rose-300">Senu</span>
+            </h1>
+
+            <p class="stagger-item stagger-3 text-pink-100/75 text-sm sm:text-base leading-relaxed mb-8 max-w-xs mx-auto">
+                I couldn't be there in person today, so I made this little pink space just for you. Tap below when you have a quiet minute.
+            </p>
+
+            <!-- Glowing Pink Heart Seal Button -->
+            <div class="stagger-item stagger-4 flex flex-col items-center">
+                <button id="unlockBtn" class="seal-btn group relative w-20 h-20 rounded-full bg-gradient-to-br from-pink-400 via-pink-500 to-rose-600 flex items-center justify-center text-white shadow-xl cursor-pointer focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 transition-transform duration-300 group-hover:scale-110" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </button>
+                <span class="text-xs text-pink-200/60 mt-4 tracking-wider uppercase font-medium">Tap seal to open</span>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- STAGE 2: THE SINCERE NOTE (EDITABLE CONTEXT + ANIMATION)  -->
+        <!-- ========================================================= -->
+        <section id="stage-2" class="stage-container glass-panel rounded-3xl p-7 sm:p-9">
+            <div class="stagger-item stagger-1 flex items-center justify-between border-b border-pink-300/15 pb-4 mb-5">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-pink-300 font-semibold">Part 01 &bull; The Sincere Note</span>
+                    <h2 id="letterGreeting" class="kinetic-greeting font-serif-display text-2xl sm:text-3xl text-white mt-0.5">Hey Senu,</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <!-- Replay Kinetic Text Animation Button -->
+                    <button id="replayLetterBtn" onclick="replayLetterAnimation()" title="Replay Text Animation" class="px-2.5 py-1.5 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/25 text-pink-200 hover:text-white text-[11px] font-medium transition-all flex items-center gap-1 cursor-pointer active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="1 4 1 10 7 10"></polyline>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                        </svg>
+                        <span>Replay</span>
+                    </button>
+                    <div class="w-10 h-10 rounded-2xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="letterBody" class="space-y-4 text-pink-50/90 text-sm sm:text-[15px] leading-relaxed font-normal min-h-[195px]">
+                <p>
+                    I know I broke your trust and hurt your heart by lying to you 🥺. Knowing that I caused you that pain is the worst feeling in the world 💔.
+                </p>
+                <p>
+                    I never told that lie to hurt you or betray our friendship—I genuinely thought I was protecting you 🛡️. But I realize now that hiding the truth isn't protection at all; it only damages the honesty you deserve from your best friend 🌸.
+                </p>
+                <p class="text-pink-200 font-medium italic closing-glow">
+                    You deserve complete honesty from me, always—no matter what 🤍. I'm truly sorry, Senu 🙏.
+                </p>
+            </div>
+
+            <div id="letterFooterAction" class="mt-8 pt-2 opacity-0 translate-y-3 transition-all duration-700">
+                <button onclick="goToStage(3)" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-pink-400 via-pink-500 to-rose-500 hover:brightness-110 text-white font-semibold text-sm sm:text-base shadow-lg shadow-pink-500/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer">
+                    <span>What You Mean To Me</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- STAGE 3: HIS HEARTFELT PROMISE & BOND LETTER (NEW PAGE)   -->
+        <!-- ========================================================= -->
+        <section id="stage-3" class="stage-container glass-panel rounded-3xl p-7 sm:p-9">
+            <div class="stagger-item stagger-1 flex items-center justify-between border-b border-pink-300/15 pb-4 mb-5">
+                <div>
+                    <span class="text-xs uppercase tracking-widest text-pink-300 font-semibold">Part 02 &bull; My Promise</span>
+                    <h2 id="promiseGreeting" class="kinetic-greeting font-serif-display text-2xl sm:text-3xl text-white mt-0.5">Why You're Irreplaceable</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="replayPromiseAnimation()" title="Replay Text Animation" class="px-2.5 py-1.5 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/25 text-pink-200 hover:text-white text-[11px] font-medium transition-all flex items-center gap-1 cursor-pointer active:scale-95">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="1 4 1 10 7 10"></polyline>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                        </svg>
+                        <span>Replay</span>
+                    </button>
+                    <div class="w-10 h-10 rounded-2xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="promiseBody" class="space-y-4 text-pink-50/90 text-sm sm:text-[15px] leading-relaxed font-normal min-h-[235px]">
+                <p>
+                    I have met many people in my life—some walked away, and some stayed 🚶‍♂️. But you are completely different, Senu ✨.
+                </p>
+                <p>
+                    You never betrayed me or left my side, even during my hardest moments 🌧️. Unlike an ordinary friend, you have guided me and taught me life lessons like a true teacher 📖. Even though I'm not your brother by blood, you care for me and stand by me just like my own sister would 👭💕.
+                </p>
+                <p class="text-pink-200 font-medium italic closing-glow">
+                    That's why I want to keep you close to me until the very end—because having you in my life makes me a better person and pushes me forward 🌟. That lie was the first and the last one. I pinky promise you 🤞 that I will never lie to you, break your trust, or hurt your heart like that ever again 🌸.
+                </p>
+            </div>
+
+            <!-- Interactive Press-and-Hold Pinky Promise Button -->
+            <div id="promiseFooterAction" class="mt-8 pt-2 opacity-0 translate-y-3 transition-all duration-700">
+                <button id="holdPromiseBtn" class="relative overflow-hidden w-full py-3.5 px-6 rounded-2xl bg-pink-500/20 border border-pink-400/40 text-white font-semibold text-sm sm:text-base shadow-lg shadow-pink-500/25 transition-all select-none cursor-pointer flex items-center justify-center gap-2">
+                    <div id="holdFillBar" class="hold-progress-fill absolute inset-y-0 left-0 w-0 bg-gradient-to-r from-pink-400 via-pink-500 to-rose-500 pointer-events-none"></div>
+                    <span id="holdPromiseLabel" class="relative z-10 flex items-center gap-2">
+                        <span>🤞 Press & Hold to Seal Our Pinky Promise</span>
+                    </span>
+                </button>
+                <p class="text-center text-[11px] text-pink-200/60 mt-2">Hold for 1.5 seconds to lock it in</p>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- STAGE 4: INTERACTIVE "FRIENDSHIP PATCH NOTES"             -->
+        <!-- ========================================================= -->
+        <section id="stage-4" class="stage-container glass-panel rounded-3xl p-7 sm:p-9">
+            <div class="stagger-item stagger-1 text-center mb-6">
+                <span class="text-xs uppercase tracking-widest text-pink-300 font-semibold">BestFriendOS &bull; Hotfix v2.0</span>
+                <h2 class="font-serif-display text-2xl sm:text-3xl text-white mt-1">Friendship Patch Notes</h2>
+                <p class="text-pink-200/75 text-xs sm:text-sm mt-1.5">Tap each note below to review and lock in the update.</p>
+            </div>
+
+            <div class="stagger-item stagger-2 space-y-3.5 mb-7" id="patchList">
+                <!-- Patch Item 1: Bug -->
+                <div onclick="togglePatch(this, 0)" class="patch-card rounded-2xl p-4 flex items-center gap-3.5 cursor-pointer select-none">
+                    <div class="patch-check-circle w-7 h-7 rounded-full border-2 border-pink-300/40 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white opacity-0 transition-opacity duration-200 check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-rose-300 block">Bug Identified</span>
+                        <h3 class="text-white font-semibold text-sm sm:text-base">A Well-Intentioned Lie</h3>
+                        <p class="text-pink-100/70 text-xs mt-0.5">Trying to protect you by hiding the truth ended up breaking your trust.</p>
+                    </div>
+                </div>
+
+                <!-- Patch Item 2: Fix -->
+                <div onclick="togglePatch(this, 1)" class="patch-card rounded-2xl p-4 flex items-center gap-3.5 cursor-pointer select-none">
+                    <div class="patch-check-circle w-7 h-7 rounded-full border-2 border-pink-300/40 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white opacity-0 transition-opacity duration-200 check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-pink-300 block">Fix Deployed</span>
+                        <h3 class="text-white font-semibold text-sm sm:text-base">Pinky Promise of Complete Honesty</h3>
+                        <p class="text-pink-100/70 text-xs mt-0.5">100% transparency with you—that lie was the first and the last one.</p>
+                    </div>
+                </div>
+
+                <!-- Patch Item 3: Peace Offering -->
+                <div onclick="togglePatch(this, 2)" class="patch-card rounded-2xl p-4 flex items-center gap-3.5 cursor-pointer select-none">
+                    <div class="patch-check-circle w-7 h-7 rounded-full border-2 border-pink-300/40 flex items-center justify-center shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white opacity-0 transition-opacity duration-200 check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-fuchsia-300 block">Peace Offering</span>
+                        <h3 class="text-white font-semibold text-sm sm:text-base">Redeemable Treat & Hangout Voucher</h3>
+                        <p class="text-pink-100/70 text-xs mt-0.5">Your favorite coffee, dessert, or hangout—my treat whenever you're ready.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stagger-item stagger-3">
+                <button id="patchContinueBtn" disabled onclick="goToStage(5)" class="w-full py-3.5 px-6 rounded-2xl bg-white/10 text-pink-200/50 font-semibold text-sm sm:text-base transition-all flex items-center justify-center gap-2 cursor-not-allowed">
+                    <span id="patchBtnText">Tap all 3 patch notes to continue (0/3)</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- STAGE 5: PLAYFUL "UN-IGNORABLE" FORGIVENESS INTERACTION   -->
+        <!-- ========================================================= -->
+        <section id="stage-5" class="stage-container glass-panel rounded-3xl p-7 sm:p-9 text-center">
+            <div class="stagger-item stagger-1 w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-400/25 to-rose-500/25 border border-pink-300/35 flex items-center justify-center mx-auto mb-5 text-pink-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+
+            <h2 class="stagger-item stagger-2 font-serif-display text-2xl sm:text-3xl text-white mb-2">
+                Can we talk and start fresh?
+            </h2>
+            
+            <p id="forgiveSubtext" class="stagger-item stagger-3 text-pink-100/85 text-sm leading-relaxed mb-7 min-h-[44px] flex items-center justify-center transition-all">
+                You mean the world to me, Senu. Protecting your trust is my #1 priority from today onward.
+            </p>
+
+            <!-- Interactive Buttons Area -->
+            <div class="stagger-item stagger-4 flex flex-col gap-3.5 items-center justify-center relative min-h-[130px]">
+                <button id="forgiveBtn" onclick="triggerFinale('forgiven')" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-pink-400 via-pink-500 to-rose-500 text-white font-bold text-base shadow-xl shadow-pink-500/35 hover:brightness-110 transition-all duration-300 cursor-pointer z-10">
+                    I forgive you 🌸
+                </button>
+
+                <button id="stillMadBtn" onclick="handleStillMad()" class="py-2.5 px-5 rounded-xl bg-pink-500/10 hover:bg-pink-500/20 border border-pink-300/20 text-pink-200 text-xs sm:text-sm font-medium transition-all duration-300 cursor-pointer">
+                    Still mad
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- STAGE 6: PINK PETAL CELEBRATION & PEACE OFFERING TICKET   -->
+        <!-- ========================================================= -->
+        <section id="stage-6" class="stage-container glass-panel rounded-3xl p-7 sm:p-9 text-center">
+            <div class="stagger-item stagger-1 inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-pink-500/20 border border-pink-400/35 text-pink-200 text-xs font-semibold tracking-wide uppercase mb-4">
+                <span id="finaleBadgeText">Thank You, Senu 🌸</span>
+            </div>
+
+            <h2 id="finaleHeading" class="stagger-item stagger-2 font-serif-display text-3xl text-white mb-2">
+                Best Friends Always
+            </h2>
+            <p id="finaleSubtitle" class="stagger-item stagger-3 text-pink-100/85 text-sm mb-6">
+                Thank you for giving me the chance to make things right. Screenshot this pink VIP ticket and redeem it whenever you're ready!
+            </p>
+
+            <!-- Redeemable Digital Peace Offering Ticket -->
+            <div class="stagger-item stagger-4 ticket-cutout rounded-2xl bg-gradient-to-br from-[#2b0f24] via-[#3b1231] to-[#240a1d] border border-pink-400/45 p-5 text-left shadow-2xl mb-6">
+                <div class="flex items-center justify-between border-b border-dashed border-pink-300/25 pb-3 mb-3">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest text-pink-300 font-bold block">Official Peace Offering</span>
+                        <span class="font-serif-display text-lg text-white font-semibold">Pink VIP Bestie Pass &bull; Senu</span>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg bg-pink-400/20 text-pink-200 text-xs font-mono font-bold">#SENU-01</span>
+                </div>
+
+                <ul class="space-y-2 text-xs sm:text-sm text-pink-50 mb-4">
+                    <li class="flex items-center gap-2">
+                        <span class="text-pink-400">&#10047;</span>
+                        <span><strong>1x Favorite Treat / Coffee</strong> (My treat, your pick)</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-rose-300">&#10047;</span>
+                        <span><strong>Pinky Promise: Zero Lies</strong> (100% honest always)</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="text-fuchsia-300">&#10047;</span>
+                        <span><strong>Redeemable:</strong> Anytime you're ready to talk or meet</span>
+                    </li>
+                </ul>
+
+                <div class="flex items-center justify-between text-[11px] text-pink-200/70 pt-2 border-t border-pink-300/15">
+                    <span>ISSUED WITH SINCERITY</span>
+                    <span class="text-pink-300 font-medium">NEVER EXPIRES</span>
+                </div>
+            </div>
+
+            <div class="stagger-item stagger-5 flex flex-col sm:flex-row gap-2.5">
+                <button onclick="copyReplyMessage()" id="copyBtn" class="flex-1 py-3 px-4 rounded-xl bg-pink-500/15 hover:bg-pink-500/25 border border-pink-400/25 text-white text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-pink-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span id="copyBtnLabel">Copy "I Forgive You" Reply</span>
+                </button>
+                <button onclick="burstConfetti()" class="py-3 px-4 rounded-xl bg-gradient-to-r from-pink-500/30 to-rose-500/30 hover:from-pink-500/40 hover:to-rose-500/40 border border-pink-400/35 text-pink-100 text-xs sm:text-sm font-medium transition-all cursor-pointer">
+                    More Petals 🌸
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-full bg-[#240a1d]/95 border border-pink-400/45 text-pink-100 text-xs font-medium shadow-xl opacity-0 pointer-events-none transition-opacity duration-300">
+        Copied to clipboard!
+    </div>
+
+    <script>
+        /* =====================================================================
+           1. STAGE NAVIGATION & KINETIC MESSAGE ANIMATION CONTROLLER
+           ===================================================================== */
+        let currentStage = 1;
+        let letterTimers = [];
+        let forgivenessOutcome = 'forgiven'; // Tracks whether she clicked 'forgive' or 'still mad'
+
+        // Phrases that automatically receive a glowing pink shimmer highlight
+        const highlightPhrases = [
+            "broke your trust",
+            "hurt your heart",
+            "protecting you",
+            "your best friend",
+            "complete honesty",
+            "truly sorry, Senu",
+            "completely different, Senu",
+            "never betrayed me",
+            "like a true teacher",
+            "like my own sister",
+            "until the very end",
+            "first and the last one",
+            "pinky promise"
+        ];
+
+        function clearLetterTimers() {
+            letterTimers.forEach(id => clearTimeout(id));
+            letterTimers = [];
+        }
+
+        /**
+         * Reusable kinetic typography animator for both Stage 2 and Stage 3 letters.
+         */
+        function animateTextSection(greetingId, bodyId, footerId) {
+            clearLetterTimers();
+
+            const greetingEl = document.getElementById(greetingId);
+            const bodyEl = document.getElementById(bodyId);
+            const footerEl = document.getElementById(footerId);
+
+            if (!greetingEl || !bodyEl) return;
+
+            greetingEl.classList.remove('text-revealed');
+            if (footerEl) {
+                footerEl.classList.add('opacity-0', 'translate-y-3');
+            }
+
+            const paragraphs = Array.from(bodyEl.querySelectorAll('p'));
+            let cumulativeDelay = 260;
+
+            letterTimers.push(setTimeout(() => {
+                greetingEl.classList.add('text-revealed');
+            }, 110));
+
+            paragraphs.forEach((p) => {
+                if (!p.dataset.rawText) {
+                    p.dataset.rawText = p.textContent.replace(/\s+/g, ' ').trim();
+                }
+                const rawText = p.dataset.rawText;
+                p.innerHTML = '';
+
+                const highlightRanges = [];
+                const lowerRaw = rawText.toLowerCase();
+                highlightPhrases.forEach(phrase => {
+                    const startIdx = lowerRaw.indexOf(phrase.toLowerCase());
+                    if (startIdx !== -1) {
+                        highlightRanges.push({ start: startIdx, end: startIdx + phrase.length });
+                    }
+                });
+
+                const words = rawText.split(' ');
+                let charCursor = 0;
+
+                words.forEach((word, wIdx) => {
+                    const wordStart = charCursor;
+                    const wordEnd = charCursor + word.length;
+                    charCursor = wordEnd + 1;
+
+                    const isHighlighted = highlightRanges.some(
+                        range => wordStart < range.end && wordEnd > range.start
+                    );
+
+                    const span = document.createElement('span');
+                    span.textContent = word;
+                    span.className = 'kinetic-word' + (isHighlighted ? ' pink-shimmer-text' : '');
+                    p.appendChild(span);
+
+                    if (wIdx < words.length - 1) {
+                        p.appendChild(document.createTextNode(' '));
+                    }
+
+                    const wordDelay = cumulativeDelay;
+                    letterTimers.push(setTimeout(() => {
+                        span.classList.add('word-visible');
+                    }, wordDelay));
+
+                    cumulativeDelay += 30;
+                });
+
+                cumulativeDelay += 220;
+            });
+
+            if (footerEl) {
+                letterTimers.push(setTimeout(() => {
+                    footerEl.classList.remove('opacity-0', 'translate-y-3');
+                }, Math.min(cumulativeDelay + 100, 4800)));
+            }
+        }
+
+        function playLetterKineticAnimation() {
+            animateTextSection('letterGreeting', 'letterBody', 'letterFooterAction');
+        }
+
+        function replayLetterAnimation() {
+            playLetterKineticAnimation();
+        }
+
+        function playPromiseKineticAnimation() {
+            animateTextSection('promiseGreeting', 'promiseBody', 'promiseFooterAction');
+        }
+
+        function replayPromiseAnimation() {
+            playPromiseKineticAnimation();
+        }
+
+        function goToStage(stageNum) {
+            const currentEl = document.getElementById(`stage-${currentStage}`);
+            const nextEl = document.getElementById(`stage-${stageNum}`);
+            const progressBar = document.getElementById('progressBar');
+
+            if (!nextEl) return;
+
+            currentEl.classList.remove('visible');
+
+            setTimeout(() => {
+                currentEl.classList.remove('active');
+                nextEl.classList.add('active');
+
+                if (stageNum >= 2 && stageNum <= 5) {
+                    progressBar.classList.remove('hidden');
+                    setTimeout(() => progressBar.classList.remove('opacity-0'), 20);
+                    updateProgressDots(stageNum - 1);
+                } else {
+                    progressBar.classList.add('opacity-0');
+                    setTimeout(() => progressBar.classList.add('hidden'), 300);
+                }
+
+                void nextEl.offsetWidth;
+                nextEl.classList.add('visible');
+                currentStage = stageNum;
+
+                if (stageNum === 2) {
+                    playLetterKineticAnimation();
+                } else if (stageNum === 3) {
+                    playPromiseKineticAnimation();
+                }
+            }, 350);
+        }
+
+        function updateProgressDots(activeIndex) {
+            for (let i = 1; i <= 5; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (!dot) continue;
+                if (i <= activeIndex) {
+                    dot.classList.remove('w-2.5', 'bg-pink-200/20');
+                    dot.classList.add('w-8', 'bg-gradient-to-r', 'from-pink-300', 'to-pink-500');
+                } else {
+                    dot.classList.add('w-2.5', 'bg-pink-200/20');
+                    dot.classList.remove('w-8', 'bg-gradient-to-r', 'from-pink-300', 'to-pink-500');
+                }
+            }
+        }
+
+        const unlockBtn = document.getElementById('unlockBtn');
+        if (unlockBtn) {
+            unlockBtn.addEventListener('click', () => {
+                if (!musicPlaying && !userManuallyMuted) {
+                    startAmbientMusic();
+                }
+                goToStage(2);
+            });
+        }
+
+        /* =====================================================================
+           2. HOLD-TO-SEAL PINKY PROMISE BUTTON (STAGE 3)
+           ===================================================================== */
+        const holdPromiseBtn = document.getElementById('holdPromiseBtn');
+        const holdFillBar = document.getElementById('holdFillBar');
+        const holdPromiseLabel = document.getElementById('holdPromiseLabel');
+        let holdInterval = null;
+        let holdProgress = 0;
+        let promiseSealed = false;
+
+        if (holdPromiseBtn) {
+            const startHold = (e) => {
+                if (promiseSealed) return;
+                if (e.cancelable) e.preventDefault();
+                clearInterval(holdInterval);
+                holdInterval = setInterval(() => {
+                    holdProgress += 5;
+                    if (holdFillBar) holdFillBar.style.width = `${Math.min(holdProgress, 100)}%`;
+                    if (holdProgress >= 100) {
+                        clearInterval(holdInterval);
+                        promiseSealed = true;
+                        if (holdPromiseLabel) {
+                            holdPromiseLabel.innerHTML = '<span>💖 Pinky Promise Sealed!</span>';
+                        }
+                        burstConfetti();
+                        setTimeout(() => goToStage(4), 650);
+                    }
+                }, 75);
+            };
+
+            const cancelHold = () => {
+                if (promiseSealed) return;
+                clearInterval(holdInterval);
+                holdProgress = 0;
+                if (holdFillBar) holdFillBar.style.width = '0%';
+            };
+
+            holdPromiseBtn.addEventListener('mousedown', startHold);
+            holdPromiseBtn.addEventListener('touchstart', startHold, { passive: false });
+            holdPromiseBtn.addEventListener('mouseup', cancelHold);
+            holdPromiseBtn.addEventListener('mouseleave', cancelHold);
+            holdPromiseBtn.addEventListener('touchend', cancelHold);
+            holdPromiseBtn.addEventListener('touchcancel', cancelHold);
+        }
+
+        /* =====================================================================
+           3. FRIENDSHIP PATCH NOTES INTERACTION (STAGE 4)
+           ===================================================================== */
+        const patchChecked = [false, false, false];
+
+        function togglePatch(cardEl, index) {
+            patchChecked[index] = !patchChecked[index];
+            const checkIcon = cardEl.querySelector('.check-icon');
+
+            if (patchChecked[index]) {
+                cardEl.classList.add('checked');
+                if (checkIcon) checkIcon.classList.remove('opacity-0');
+            } else {
+                cardEl.classList.remove('checked');
+                if (checkIcon) checkIcon.classList.add('opacity-0');
+            }
+
+            const count = patchChecked.filter(Boolean).length;
+            const continueBtn = document.getElementById('patchContinueBtn');
+            const btnText = document.getElementById('patchBtnText');
+
+            if (count === 3) {
+                continueBtn.disabled = false;
+                continueBtn.className = 'w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-pink-400 via-pink-500 to-rose-500 hover:brightness-110 text-white font-semibold text-sm sm:text-base shadow-lg shadow-pink-500/30 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer';
+                btnText.textContent = 'Apply Update & Continue ✨';
+            } else {
+                continueBtn.disabled = true;
+                continueBtn.className = 'w-full py-3.5 px-6 rounded-2xl bg-white/10 text-pink-200/50 font-semibold text-sm sm:text-base transition-all flex items-center justify-center gap-2 cursor-not-allowed';
+                btnText.textContent = `Tap all 3 patch notes to continue (${count}/3)`;
+            }
+        }
+
+        /* =====================================================================
+           4. PLAYFUL FORGIVENESS BUTTONS & FINALE PATHS (STAGES 5 & 6)
+           ===================================================================== */
+        let madClicks = 0;
+        const madPrompts = [
+            { btn: "Still a little mad 😤", sub: "I totally understand why you're upset, Senu. Take your time—I'm right here." },
+            { btn: "Hmm... maybe 🤔", sub: "What if I add extra dessert + your favorite drink to the VIP Pass?" },
+            { btn: "Okay, I'm listening... 🥺", sub: "You're my best friend and like a sister to me. I promise I'll earn your trust back." },
+            { btn: "Fine, let's talk 🌸", sub: "That's all I ask for! Tap below to claim your VIP Bestie Pass." }
+        ];
+
+        function handleStillMad() {
+            const stillMadBtn = document.getElementById('stillMadBtn');
+            const forgiveBtn = document.getElementById('forgiveBtn');
+            const subtext = document.getElementById('forgiveSubtext');
+
+            if (madClicks < madPrompts.length) {
+                const step = madPrompts[madClicks];
+                stillMadBtn.textContent = step.btn;
+                subtext.textContent = step.sub;
+
+                // Gently scale up the primary forgiveness button
+                const scale = Math.min(1 + (madClicks + 1) * 0.04, 1.14);
+                forgiveBtn.style.transform = `scale(${scale})`;
+                madClicks++;
+            } else {
+                triggerFinale('still_mad');
+            }
+        }
+
+        function triggerFinale(outcome) {
+            forgivenessOutcome = outcome;
+
+            const badge = document.getElementById('finaleBadgeText');
+            const heading = document.getElementById('finaleHeading');
+            const subtitle = document.getElementById('finaleSubtitle');
+            const copyLabel = document.getElementById('copyBtnLabel');
+
+            if (outcome === 'still_mad') {
+                badge.textContent = 'Still A Little Mad (Valid!) 😤🌸';
+                heading.textContent = 'I Owe You Extra Treats';
+                subtitle.textContent = 'Even if you’re still mad at me, thank you for hearing me out. Screenshot this pass—extra treats are on me whenever you’re ready to talk!';
+                copyLabel.textContent = 'Copy "Still Mad, Let\'s Talk" Reply';
+            } else {
+                badge.textContent = 'Thank You, Senu 🌸';
+                heading.textContent = 'Best Friends Always';
+                subtitle.textContent = 'Thank you for giving me the chance to make things right. Screenshot this pink VIP ticket and redeem it whenever you\'re ready!';
+                copyLabel.textContent = 'Copy "I Forgive You" Reply';
+            }
+
+            goToStage(6);
+            setTimeout(() => burstConfetti(), 350);
+        }
+
+        function copyReplyMessage() {
+            const replyText = forgivenessOutcome === 'still_mad'
+                ? "I saw your note. I'm still a little mad at you, so you definitely owe me extra treats—but let's talk soon 🌸"
+                : "I read your note, and I forgive you 🌸 Let's talk soon—and I'm definitely redeeming my Pink VIP Bestie Pass!";
+
+            const tempInput = document.createElement('textarea');
+            tempInput.value = replyText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToast('Reply copied! Paste it in chat 💌');
+            } catch (err) {
+                showToast('Could not copy automatically');
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = message;
+            toast.classList.remove('opacity-0');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+            }, 2600);
+        }
+
+        /* =====================================================================
+           5. TAP-ANYWHERE FLOATING PINK HEARTS
+           ===================================================================== */
+        const tapHeartEmojis = ['🌸', '💗', '💖', '✨', '🌷', '💕'];
+        document.addEventListener('pointerdown', (e) => {
+            if (e.target.closest('button')) return;
+            const heart = document.createElement('span');
+            heart.className = 'tap-heart';
+            heart.textContent = tapHeartEmojis[Math.floor(Math.random() * tapHeartEmojis.length)];
+            heart.style.left = `${e.clientX}px`;
+            heart.style.top = `${e.clientY}px`;
+            heart.style.setProperty('--drift-x', `${(Math.random() - 0.5) * 44}px`);
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1350);
+        });
+
+        /* =====================================================================
+           6. GENTLE AMBIENT MUSIC-BOX SYNTHESIZER (TONE.JS)
+           ===================================================================== */
+        let musicPlaying = false;
+        let userManuallyMuted = false;
+        let musicLoop = null;
+        let musicSynth = null;
+
+        async function startAmbientMusic() {
+            const label = document.getElementById('musicLabel');
+            const icon = document.getElementById('musicIcon');
+
+            if (typeof Tone === 'undefined' || musicPlaying) return;
+
+            try {
+                await Tone.start();
+                if (!musicSynth) {
+                    const reverb = new Tone.Reverb({ decay: 3.5, wet: 0.45 }).toDestination();
+                    musicSynth = new Tone.PolySynth(Tone.Synth, {
+                        oscillator: { type: 'sine' },
+                        envelope: { attack: 0.08, decay: 0.9, sustain: 0.2, release: 1.8 }
+                    }).connect(reverb);
+                    musicSynth.volume.value = -14;
+
+                    const melodyNotes = [
+                        ['E4', 'G4', 'B4'], ['D4', 'F#4', 'A4'],
+                        ['C4', 'E4', 'G4'], ['B3', 'D4', 'G4'],
+                        ['A3', 'C4', 'E4'], ['B3', 'D4', 'F#4'],
+                        ['E4', 'G4', 'B4'], ['E4', 'B4', 'E5']
+                    ];
+                    let step = 0;
+                    musicLoop = new Tone.Loop((time) => {
+                        const chord = melodyNotes[step % melodyNotes.length];
+                        musicSynth.triggerAttackRelease(chord, '2n', time);
+                        step++;
+                    }, '2n');
+                }
+                Tone.Transport.bpm.value = 72;
+                musicLoop.start(0);
+                Tone.Transport.start();
+                musicPlaying = true;
+                if (label) label.textContent = 'Soft Music: On';
+                if (icon) icon.textContent = '🎶';
+            } catch (err) {
+                // Browser autoplay policy waiting for first user tap
+            }
+        }
+
+        async function toggleAmbientMusic() {
+            const label = document.getElementById('musicLabel');
+            const icon = document.getElementById('musicIcon');
+
+            if (typeof Tone === 'undefined') {
+                showToast('Audio unavailable in this browser');
+                return;
+            }
+
+            if (!musicPlaying) {
+                userManuallyMuted = false;
+                await startAmbientMusic();
+            } else {
+                userManuallyMuted = true;
+                Tone.Transport.pause();
+                musicPlaying = false;
+                if (label) label.textContent = 'Soft Music: Off';
+                if (icon) icon.textContent = '🎵';
+            }
+        }
+
+        // Automatically unlock music on first touch/click anywhere if browser blocked initial autoplay
+        function unlockAudioOnFirstGesture() {
+            if (!musicPlaying && !userManuallyMuted) {
+                startAmbientMusic();
+            }
+            if (musicPlaying || userManuallyMuted) {
+                document.removeEventListener('pointerdown', unlockAudioOnFirstGesture);
+                document.removeEventListener('touchstart', unlockAudioOnFirstGesture);
+            }
+        }
+        document.addEventListener('pointerdown', unlockAudioOnFirstGesture);
+        document.addEventListener('touchstart', unlockAudioOnFirstGesture, { passive: true });
+
+        /* =====================================================================
+           7. AMBIENT PINK PETALS & CELEBRATION CONFETTI CANVASES
+           ===================================================================== */
+        const bgCanvas = document.getElementById('bgCanvas');
+        const bgCtx = bgCanvas ? bgCanvas.getContext('2d') : null;
+        const confettiCanvas = document.getElementById('confettiCanvas');
+        const confettiCtx = confettiCanvas ? confettiCanvas.getContext('2d') : null;
+
+        let ambientPetals = [];
+        let confettiParticles = [];
+
+        function resizeCanvases() {
+            if (bgCanvas) {
+                bgCanvas.width = window.innerWidth;
+                bgCanvas.height = window.innerHeight;
+            }
+            if (confettiCanvas) {
+                confettiCanvas.width = window.innerWidth;
+                confettiCanvas.height = window.innerHeight;
+            }
+        }
+
+        window.addEventListener('resize', resizeCanvases);
+
+        function initAmbientPetals() {
+            ambientPetals = [];
+            const count = Math.min(36, Math.floor(window.innerWidth / 24));
+            const colors = [
+                'rgba(244, 114, 182, 0.35)',
+                'rgba(251, 207, 232, 0.28)',
+                'rgba(236, 72, 153, 0.30)',
+                'rgba(253, 164, 175, 0.32)'
+            ];
+            for (let i = 0; i < count; i++) {
+                ambientPetals.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    size: Math.random() * 5 + 3,
+                    speedY: Math.random() * 0.45 + 0.2,
+                    speedX: (Math.random() - 0.5) * 0.4,
+                    angle: Math.random() * Math.PI * 2,
+                    spin: (Math.random() - 0.5) * 0.02,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+        }
+
+        function burstConfetti() {
+            const palette = ['#f472b6', '#ec4899', '#fbcfe8', '#fda4af', '#f9a8d4', '#ffffff'];
+            for (let i = 0; i < 95; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 7 + 3;
+                confettiParticles.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight * 0.45,
+                    vx: Math.cos(angle) * velocity,
+                    vy: Math.sin(angle) * velocity - 3,
+                    size: Math.random() * 7 + 4,
+                    color: palette[Math.floor(Math.random() * palette.length)],
+                    rotation: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 10,
+                    alpha: 1
+                });
+            }
+        }
+
+        function animateLoop() {
+            if (bgCtx && bgCanvas) {
+                bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+                ambientPetals.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX + Math.sin(p.angle) * 0.25;
+                    p.angle += p.spin;
+
+                    if (p.y > bgCanvas.height + 10) {
+                        p.y = -10;
+                        p.x = Math.random() * bgCanvas.width;
+                    }
+                    if (p.x > bgCanvas.width + 10) p.x = -10;
+                    if (p.x < -10) p.x = bgCanvas.width + 10;
+
+                    bgCtx.save();
+                    bgCtx.translate(p.x, p.y);
+                    bgCtx.rotate(p.angle);
+                    bgCtx.fillStyle = p.color;
+                    bgCtx.beginPath();
+                    bgCtx.ellipse(0, 0, p.size, p.size * 0.6, 0, 0, Math.PI * 2);
+                    bgCtx.fill();
+                    bgCtx.restore();
+                });
+            }
+
+            if (confettiCtx && confettiCanvas) {
+                confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                for (let i = confettiParticles.length - 1; i >= 0; i--) {
+                    const c = confettiParticles[i];
+                    c.x += c.vx;
+                    c.y += c.vy;
+                    c.vy += 0.16; // Gravity
+                    c.vx *= 0.99;
+                    c.rotation += c.rotSpeed;
+                    c.alpha -= 0.011;
+
+                    if (c.alpha <= 0) {
+                        confettiParticles.splice(i, 1);
+                        continue;
+                    }
+
+                    confettiCtx.save();
+                    confettiCtx.globalAlpha = c.alpha;
+                    confettiCtx.translate(c.x, c.y);
+                    confettiCtx.rotate((c.rotation * Math.PI) / 180);
+                    confettiCtx.fillStyle = c.color;
+                    confettiCtx.beginPath();
+                    confettiCtx.ellipse(0, 0, c.size, c.size * 0.55, 0, 0, Math.PI * 2);
+                    confettiCtx.fill();
+                    confettiCtx.restore();
+                }
+            }
+
+            requestAnimationFrame(animateLoop);
+        }
+
+        window.onload = function () {
+            resizeCanvases();
+            initAmbientPetals();
+            animateLoop();
+            // Attempt immediate autoplay on load
+            startAmbientMusic();
+        };
+    </script>
+</body>
+</html>
